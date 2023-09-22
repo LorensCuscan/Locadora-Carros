@@ -12,7 +12,8 @@ class MarcaController extends Controller
      */
     public function index()
     {
-        //
+        $marcas = Marca::all();
+        echo $marcas;
     }
 
     /**
@@ -37,7 +38,7 @@ class MarcaController extends Controller
      */
     public function show(Marca $marca)
     {
-        //
+        echo $marca;
     }
 
     /**
