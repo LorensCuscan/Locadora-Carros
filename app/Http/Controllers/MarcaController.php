@@ -36,11 +36,13 @@ class MarcaController extends Controller
     public function store(Request $request)
     {
    
-        dd($request->imagem);
+        $image = $request->file('imagem');
+        $image->store('imagens');
+        dd('Upload de arquivos');
 
        $request->validate($this->marca->rules(), $this->marca->feedback());
       // $marca = $this->marca->create($request->all());  
-       return response()->json($marca. 201);
+       return response()->json($this->marca, 201);
     
     }
 
@@ -54,7 +56,7 @@ class MarcaController extends Controller
         if($marca === null){
             return response()->json(['erro' => 'Recurso pesquisado nao existe'], 404);
         }
-       return response()->json($marca, 200);
+       return response()->json($this->marca, 200);
     }
 
     /**
