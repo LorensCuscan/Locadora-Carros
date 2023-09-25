@@ -36,21 +36,17 @@ class MarcaController extends Controller
     public function store(Request $request)
     {
       
+        $request->validate($this->marca->rules(), $this->marca->feedback());
+
         $imagem = $request->file('imagem');
         $imagem_urn = $imagem->store('imagens', 'public');
-       
 
         $marca = $this->marca->create([
             'nome' => $request->nome,
             'imagem' => $imagem_urn
         ]);
-        $request->validate($this->marca->rules(), $this->marca->feedback());
-      
 
-     
-      // $marca = $this->marca->create($request->all());  
-       return response()->json($marca, 201);
-    
+        return response()->json($marca, 201);
     }
 
     /**
@@ -119,6 +115,8 @@ class MarcaController extends Controller
             return response()->json(['erro' => 'Impossivel realizar a remoção. O recurso solicitado não existe'], 404);
         }
         $marca->delete();
-        return response()->json(['msg' => 'Impossivel realizar a atualização. O recurso solicitado não existe'], 200);
+        return response()->json(['msg' => 'Registro apagado com sucesso'], 200);
     }
+
+    
 }
