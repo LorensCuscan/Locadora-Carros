@@ -100,10 +100,10 @@ class MarcaController extends Controller
             $request->validate($marca->rules(), $marca->feedback());
         }
 
-        //remove o arquivo antigo caso um novo arquivo tenha sido enviado no request
-        if($request->file('imagem')){
+        //remove o arquivo antigo 
+       
             Storage::disk('public')->delete($marca->imagem);
-        }
+        
         
         $marca->update($request->all());
         return response()->json($marca, 200);
