@@ -45,10 +45,10 @@ class ModeloController extends Controller
             'marca_id' => $request->marca_id,
             'nome' => $request->nome,
             'imagem' => $imagem_urn,
-            'numero_portas' => $request->nome,
-            'lugares' => $request->nome,
-            'air_bag' => $request->nome,
-            'abs' => $request->nome
+            'numero_portas' => $request->numero_portas,
+            'lugares' => $request->lugares,
+            'air_bag' => $request->air_bag,
+            'abs' => $request->abs
         ]);
 
         return response()->json($modelo, 201);
