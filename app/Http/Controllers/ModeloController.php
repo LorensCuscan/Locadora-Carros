@@ -64,7 +64,7 @@ class ModeloController extends Controller
         if($modelo === null){
             return response()->json(['erro' => 'Recurso pesquisado nao existe'], 404);
         }
-       return response()->json($this->modelo, 200);
+        return response()->json($modelo, 200);
     }
 
     /**
@@ -78,9 +78,9 @@ class ModeloController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Modelo $modelo)
+    public function update(Request $request, $id)
     {
-   
+        $modelo = $this->modelo->find($id);
 
         if($modelo === null) {
             return response()->json(['erro' => 'Impossível realizar a atualização. O recurso solicitado não existe'], 404);
