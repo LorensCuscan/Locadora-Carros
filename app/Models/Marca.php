@@ -26,4 +26,9 @@ class Marca extends Model
         'imagem.min' => 'O nome da imagem deve ser do tipo PNG.'
     ];
     }
+
+    public function modelos() {
+        //UMA marca POSSUI MUITOS modelos
+        return $this->hasMany('App\Models\Modelo');
+    }
 }

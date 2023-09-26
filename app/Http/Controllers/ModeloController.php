@@ -20,7 +20,7 @@ class ModeloController extends Controller
     public function index()
     {
      
-        return response()->json($this->modelo->all());
+        return response()->json($this->modelo->with('marca')->get(), 200);
     }
 
     /**
@@ -59,7 +59,7 @@ class ModeloController extends Controller
      */
     public function show($id)
     {
-        $modelo = $this->modelo->find($id);
+        $modelo = $this->modelo->with('marca')->find($id);
 
         if($modelo === null){
             return response()->json(['erro' => 'Recurso pesquisado nao existe'], 404);
@@ -142,5 +142,9 @@ class ModeloController extends Controller
 
         $modelo->delete();
         return response()->json(['msg' => 'O modelo foi removida com sucesso!'], 200);
+    }
+
+    public function modelo(){
+        return $this->hasMany('App\Models\Modelo');
     }
 }
