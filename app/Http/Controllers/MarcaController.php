@@ -90,7 +90,8 @@ class MarcaController extends Controller
             foreach($marca->rules() as $input => $regra) {
                 
                 //coletar apenas as regras aplicáveis aos parâmetros parciais da requisição PATCH
-                if(array_key_exists($input, $request->all())) {                    $regrasDinamicas[$input] = $regra;
+                if(array_key_exists($input, $request->all())) {
+                    $regrasDinamicas[$input] = $regra;
                 }
             }
             
@@ -99,13 +100,26 @@ class MarcaController extends Controller
         } else {
             $request->validate($marca->rules(), $marca->feedback());
         }
-
-        //remove o arquivo antigo 
-       
+        
+        //remove o arquivo antigo caso um novo arquivo tenha sido enviado no request
+        if($request->file('imagem')) {
             Storage::disk('public')->delete($marca->imagem);
+        }
         
-        
-        $marca->update($request->all());
+        $imagem = $request->file('imagem');
+        $imagem_urn = $imagem->store('imagens', 'public');
+        // preencher o objeto marca com os dados do request
+    
+        $marca->fill($request->all());
+        $marca->imagem = $imagem_urn;
+
+        $marca->save();
+
+        $marca->update([
+            'nome' => $request->nome,
+            'imagem' => $imagem_urn
+        ]);
+
         return response()->json($marca, 200);
     }
 
