@@ -36,6 +36,11 @@ class ModeloController extends Controller
             $modelos = $modelos->get();
         }
 
+        if($request->has('filtro')){
+            $condicoes = explode(':', $request->filtro);
+            $modelos = $modelos->where($condicoes[0], $condicoes[1], $condicoes[2]);
+        }
+
         //$this->modelo->with('marca')->get()
         return response()->json($modelos, 200);
         //all() -> criando um obj de consulta + get() = collection
