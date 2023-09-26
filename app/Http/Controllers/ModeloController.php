@@ -20,40 +20,46 @@ class ModeloController extends Controller
     public function index(Request $request)
     {
 
-        $modelos = array();
+        
+    $modelos = array();
 
-        if($request->has('atributos_marca')) {
-            $atributos_marca = $request->atributos_marca;
-            $modelos = $this->modelo->with('marca:id,'.$atributos_marca);
-        } else {
-            $modelos = $this->modelo->with('marca');
-        }
-
-        if($request->has('atributos')) {
-            $atributos = $request->atributos;
-            $modelos = $modelos->selectRaw($atributos)->get();
-        } else {
-            $modelos = $modelos->get();
-        }
-
-        if($request->has('filtro')){
-            $condicoes = explode(':', $request->filtro);
-            $modelos = $modelos->where($condicoes[0], $condicoes[1], $condicoes[2]);
-        }
-
-        //$this->modelo->with('marca')->get()
-        return response()->json($modelos, 200);
-        //all() -> criando um obj de consulta + get() = collection
-        //get() -> modificar a consulta -> collection
+    if($request->has('atributos_marca')) {
+        $atributos_marca = $request->atributos_marca;
+        $modelos = $this->modelo->with('marca:id,'.$atributos_marca);
+    } else {
+        $modelos = $this->modelo->with('marca');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    if($request->has('atributos')) {
+        $atributos = $request->atributos;
+        $modelos = $modelos->selectRaw($atributos)->get();
+    } else {
+        $modelos = $modelos->get();
     }
+
+    if($request->has('filtro')) {
+        $filtros = explode(';', $request->filtro);
+        foreach($filtros as $key => $condicao) {
+
+            $c = explode(':', $condicao);
+            $modelos = $modelos->where($c[0], $c[1], $c[2]);
+
+        }
+    }
+
+    /* Comentário fechado corretamente */
+    return response()->json($modelos, 200);
+    //all() -> criando um obj de consulta + get() = collection
+    //get() -> modificar a consulta -> collection
+}
+
+/**
+ * Show the form for creating a new resource.
+ */
+public function create()
+{
+    //
+}
 
     /**
      * Store a newly created resource in storage.
