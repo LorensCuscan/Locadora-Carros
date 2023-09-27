@@ -28,15 +28,18 @@ class MarcaController extends Controller
             $marcas = $this->marca->with('modelos');
         }
 
-        if($request->has('filtro')) {
-            $filtros = explode(';', $request->filtro);
-            foreach($filtros as $key => $condicao) {
+        if ($request->has('filtro')) {
+        $filtros = explode(';', $request->filtro);
 
-                $c = explode(':', $condicao);
-                $marcas = $marcas->where($c[0], $c[1], $c[2]);
+        foreach ($filtros as $filtro) {
+        $condicoes = explode(':', $filtro);
+        $campo = $condicoes[0];
+        $operador = $condicoes[1];
+        $valor = $condicoes[2];
 
-            }
-        }
+        $marcas = $marcas->where($campo, $operador, $valor);
+    }
+}
 
         if($request->has('atributos')) {
             $atributos = $request->atributos;
