@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Marca;
 use App\Models\Modelo;
+use App\Repositories\ModeloRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -19,38 +20,49 @@ class ModeloController extends Controller
      */
     public function index(Request $request)
     {
+        $modelos = array();
 
-        
-    $modelos = array();
-
-    if($request->has('atributos_marca')) {
-        $atributos_marca = $request->atributos_marca;
-        $modelos = $this->modelo->with('marca:id,'.$atributos_marca);
-    } else {
-        $modelos = $this->modelo->with('marca');
-    }
-
-    if($request->has('atributos')) {
-        $atributos = $request->atributos;
-        $modelos = $modelos->selectRaw($atributos)->get();
-    } else {
-        $modelos = $modelos->get();
-    }
-
-    if($request->has('filtro')) {
-        $filtros = explode(';', $request->filtro);
-        foreach($filtros as $key => $condicao) {
-
-            $c = explode(':', $condicao);
-            $modelos = $modelos->where($c[0], $c[1], $c[2]);
-
+        if($request->has('atributos_marca')) {
+            $atributos_marca = $request->atributos_marca;
+            $modelos = $this->modelo->with('marca:id,'.$atributos_marca);
+        } else {
+            $modelos = $this->modelo->with('marca');
         }
+
+        if($request->has('filtro')) {
+            $filtros = explode(';', $request->filtro);
+            foreach($filtros as $key => $condicao) {
+
+                $c = explode(':', $condicao);
+                $modelos = $modelos->where($c[0], $c[1], $c[2]);
+
+            }
+        }
+
+        if($request->has('atributos')) {
+            $atributos = $request->atributos;
+            $modelos = $modelos->selectRaw($atributos)->get();
+        } else {
+            $modelos = $modelos->get();
+        }
+
+        //$this->modelo->with('marca')->get()
+        return response()->json($modelos, 200);
+        //all() -> criando um obj de consulta + get() = collection
+        //get() -> modificar a consulta -> collection
     }
 
-    /* Comentário fechado corretamente */
-    return response()->json($modelos, 200);
-    //all() -> criando um obj de consulta + get() = collection
-    //get() -> modificar a consulta -> collection
+    /**
+     * Display the specified resource.
+     */
+    public function show($id)
+    {
+        $marca = $this->marca->with('modelos')->find($id);
+
+        if($marca === null){
+            return response()->json(['erro' => 'Recurso pesquisado nao existe'], 404);
+        }
+       return response()->json($this->marca, 200);
 }
 
 /**
