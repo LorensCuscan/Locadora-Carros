@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Marca;
+use App\Repositories\MarcaRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+
 
 class MarcaController extends Controller
 {
@@ -19,66 +21,25 @@ class MarcaController extends Controller
     public function index(Request $request)
     {
 
-        $marcas = array();
+
+        $marcaRepository = new MarcaRepository($this->marca);
 
         if($request->has('atributos_modelos')) {
-            $atributos_modelos = $request->atributos_modelos;
-            $marcas = $this->marca->with('modelos:id,'.$atributos_modelos);
+            $atributos_modelos = 'modelos:id,'.$request->atributos_modelos;
+            $marcaRepository->selectAtributosRegistrosRelacionados($atributos_modelos);
         } else {
-            $marcas = $this->marca->with('modelos');
+            $marcaRepository->selectAtributosRegistrosRelacionados('modelos');
         }
 
-        if ($request->has('filtro')) {
-        $filtros = explode(';', $request->filtro);
-
-        foreach ($filtros as $filtro) {
-        $condicoes = explode(':', $filtro);
-        $campo = $condicoes[0];
-        $operador = $condicoes[1];
-        $valor = $condicoes[2];
-
-        $marcas = $marcas->where($campo, $operador, $valor);
-    }
-}
+        if($request->has('filtro')) {
+            $marcaRepository->filtro($request->filtro);
+        }
 
         if($request->has('atributos')) {
-            $atributos = $request->atributos;
-            $marcas = $marcas->selectRaw($atributos)->get();
-        } else {
-            $marcas = $marcas->get();
-        }
+            $marcaRepository->selectAtributos($request->atributos);
+        } 
 
-
-        //$marcas = Marca::all();
-        //$marcas = $this->marca->with('modelos')->get();
-        return response()->json($marcas, 200);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-      
-        $request->validate($this->marca->rules(), $this->marca->feedback());
-
-        $imagem = $request->file('imagem');
-        $imagem_urn = $imagem->store('imagens', 'public');
-
-        $marca = $this->marca->create([
-            'nome' => $request->nome,
-            'imagem' => $imagem_urn
-        ]);
-
-        return response()->json($marca, 201);
+        return response()->json($marcaRepository->getResultado(), 200);
     }
 
     /**
