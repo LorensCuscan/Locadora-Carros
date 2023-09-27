@@ -19,6 +19,13 @@ class MarcaRepository {
 
     public function filtro($filtros) {
         $filtros = explode(';', $filtros);
+
+        foreach($filtros as $key => $condicao) {
+            $c = explode(':', $condicao);
+    
+            if (count($c) === 3) {
+                $this->model = $this->model->where($c[0], $c[1], $c[2]);
+            }}
         
         foreach($filtros as $key => $condicao) {
 
