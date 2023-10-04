@@ -1,7 +1,7 @@
 <?php
 
 
-
+use Tymon\JWTAuth\Providers\JWT\Provider;
 /*
  * This file is part of jwt-auth.
  *
