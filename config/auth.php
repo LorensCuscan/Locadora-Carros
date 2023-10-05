@@ -41,8 +41,8 @@ return [
             'provider' => 'users',
         ],
 
-    'api' => [
-        'web' => [
+    
+        'api' => [
             'driver' => 'jwt',
             'provider' => 'users',
             'hash' => false,
@@ -119,4 +119,4 @@ return [
 
     'password_timeout' => 10800,
 
-]];
+];
