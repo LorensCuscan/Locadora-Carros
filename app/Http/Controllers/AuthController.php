@@ -17,9 +17,9 @@ class AuthController extends Controller
         } else { //usuario nao autenticado ERRO
             return response()->json(['erro' => 'Usuario ou senha invalido'], 403);
         }
-        
+
         //retornar um token JWT
-        return 'login';
+       
     }
     public function logout(){
         return 'logout';
@@ -28,6 +28,6 @@ class AuthController extends Controller
         return 'refresh';
     }
     public function me(){
-        return 'me';
+        return response()->json(auth()->user());
     }
 }
