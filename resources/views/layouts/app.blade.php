@@ -89,6 +89,16 @@
             </div>
         </nav>
 
+        @auth
+        <nav aria-label="breadcrumb">
+            <br>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">{{Route::currentRouteName()}}</li>
+            </ol>
+          </nav>
+        @endauth
+
         <main class="py-4">
             @yield('content')
         </main>
