@@ -9,8 +9,8 @@
                     <template v-slot:conteudo>
                         <div class="row g-3">
                             <div class="col mb-3">
-                                <input-container-component titulo="ID" id="inputId" id-help="idHelp" texto-ajuda="Opcional. Informe o ID da marca">
-                                    <input type="number" class="form-control" id="inputId" aria-describedby="idHelp" placeholder="ID">
+                                <input-container-component titulo="ID" id="inputId" id-help="numberHelp" texto-ajuda="Opcional. Informe o ID da marca">
+                                    <input type="number" class="form-control" id="inputId" aria-describedby="numberHelp" placeholder="ID">
                                 </input-container-component>     
                                              
                             </div>
@@ -54,13 +54,13 @@
                 </div>
 
                 <div class="form-group">
-                    <input-container-component  id="novoImagem" id-help="novoImagemHelp" texto-ajuda="Selecione uma imagem no formato PNG">
+                    <input-container-component  titulo="Imagem" id="novoImagem" id-help="novoImagemHelp" texto-ajuda="Selecione uma imagem no formato PNG">
                         <input type="file" class="form-control-file" id="novoImagem" aria-describedby="novoImagemHelp" placeholder="Selecione uma imagem" @change="carregarImagem($event)">
                     </input-container-component>
                     {{ arquivoImagem }} 
                 </div>
             </template>
-
+ 
             <template v-slot:rodape>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                 <button type="button" class="btn btn-primary" @click="salvar">Salvar</button>
@@ -72,6 +72,14 @@
 
 <script>
 export default {
+                computed: {
+                        token() {
+                            let token = document.cookie.split(';').find(indice =>{
+                                       console.log(indice, indice.includes('token='))
+                            })
+                     
+                        }
+                    },
                 data() {
                     return {
                         urlBase: 'http://localhost:8000/api/v1/marca',
@@ -80,6 +88,7 @@ export default {
                     };
                 },
                 methods: {
+                   
                     carregarImagem(e) {
                     this.arquivoImagem = e.target.files;
                     },
@@ -93,7 +102,8 @@ export default {
                         let config = {
                             headers: {
                                 'Content-Type' : 'multipart/form-data',
-                                'Accept': 'application/json'
+                                'Accept': 'application/json',
+                                'Authorization': this.token
                             }
                         }
 
