@@ -75,9 +75,11 @@ export default {
                 computed: {
                         token() {
                             let token = document.cookie.split(';').find(indice =>{
-                                       console.log(indice, indice.includes('token='))
+                                      return indice, indice.includes('token=')
                             })
-                     
+                        token = token.split('=')
+                        token = 'Bearer' + token                       
+                        return token
                         }
                     },
                 data() {
