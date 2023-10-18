@@ -47,24 +47,26 @@
      <modal-component id="modalMarca" titulo="Adicionar marca">
 
         <template v-slot:alertas>
-            <alert-component tipo="success"></alert-component>
-            <alert-component tipo="danger"></alert-component>
+            <alert-component tipo="success" v-if="transicaoStatus == 'adicionado'"></alert-component>
+            <alert-component tipo="success" v-if="transicaoStatus == 'erro'"></alert-component>
+           
         </template>
 
 
             <template v-slot:conteudo>
                 <div class="form-group">
-                    <input-container-component titulo="Nome da marca" id="novoNome" id-help="novoNomeHelp" texto-ajuda="Informe o nome da marca">
-                        <input type="text" class="form-control" id="novoNome" aria-describedby="novoNomeHelp" placeholder="Nome da marca" v-model="nomeMarca">
+                    <input-container-component titulo="Nome da marca" id="novoNome" id-help="novoNomeHelp" >
+                        <input type="text" class="form-control" id="novoNome" aria-describedby="novoNomeHelp" placeholder="Informe o nome da marca" v-model="nomeMarca">
                     </input-container-component>
                     {{ nomeMarca }}
                 </div>
 
                 <div class="form-group">
-                    <input-container-component  titulo="Imagem" id="novoImagem" id-help="novoImagemHelp" texto-ajuda="Selecione uma imagem no formato PNG">
+                    <input-container-component  titulo="" id="novoImagem" id-help="novoImagemHelp" texto-ajuda="Selecione uma imagem no formato PNG">
+                    <br>
                         <input type="file" class="form-control-file" id="novoImagem" aria-describedby="novoImagemHelp" placeholder="Selecione uma imagem" @change="carregarImagem($event)">
                     </input-container-component>
-                    {{ arquivoImagem }} 
+              
                 </div>
             </template>
  
@@ -94,6 +96,7 @@ export default {
                         urlBase: 'http://localhost:8000/api/v1/marca',
                     nomeMarca: '',
                     arquivoImagem: [],
+                    transicaoStatus: ''
                     };
                 },
                 methods: {
@@ -118,9 +121,11 @@ export default {
 
                         axios.post(this.urlBase, formData, config)
                         .then(response => {
+                            this.transicaoStatus = 'adicionado'
                             console.log(response)
                         })
                         .catch(errors => {
+                             this.transicaoStatus = 'erro'
                             console.log(errors)
                         })
                     }
