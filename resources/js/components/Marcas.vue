@@ -100,7 +100,7 @@ export default {
                     nomeMarca: '',
                     arquivoImagem: [],
                     transicaoStatus: '',
-                    transicaoDetalhes: []
+                    transicaoDetalhes: {}
                     };
                 },
                 methods: {
@@ -126,13 +126,18 @@ export default {
                         axios.post(this.urlBase, formData, config)
                         .then(response => {
                             this.transicaoStatus = 'adicionado'
-                            this.transicaoDetalhes = response
+                            this.transicaoDetalhes = {
+                                mensagem: 'Id do registro:' + response.data.id
+                          
+                            }
                             console.log(response)
                         })
                         .catch(errors => {
                              this.transicaoStatus = 'erro'
-                             this.transicaoDetalhes = errors.response
-                            console.log(errors.response.data.message)
+                             this.transicaoDetalhes = {
+                                mensagem: errors.response.data.message,
+                                dados: errors.response.data.errors
+                             }
                         })
                     }
                 },

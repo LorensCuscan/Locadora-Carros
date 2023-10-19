@@ -1,10 +1,11 @@
 <template>
     <div :class="estilo" role="alert">
-        {{titulo}}    
-        <ul  v-if="detalhes.data.errors">
-         <span v-if="detalhes.data.message">{{ detalhes.data.message }}</span>
-         <span v-if="detalhes.data.id">{{'Id do registro:' + detalhes.data.id }}</span>
-            <li v-for="e, key in detalhes.data.errors" :key="key">{{ e[0] }}</li>           
+        {{titulo}}
+        <hr>
+        <p>{{ detalhes.mensagem }}</p>
+        <br>
+        <ul v-if="detalhes.dados">
+            <li v-for="e, key in detalhes.dados" :key="key">{{ e[0] }}</li>
         </ul>
     </div>
 </template>
