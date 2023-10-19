@@ -47,8 +47,8 @@
      <modal-component id="modalMarca" titulo="Adicionar marca">
 
         <template v-slot:alertas>
-            <alert-component tipo="success" v-if="transicaoStatus == 'adicionado'"></alert-component>
-            <alert-component tipo="danger" :detalhes="transicaoDetalhes" titulo="Erro ao tentar cadastrar a marca" v-if="transicaoStatus == 'erro'"></alert-component>
+            <alert-component tipo="success" :detalhes="transicaoDetalhes" titulo="Cadastro realizado com sucesso!" v-if="transicaoStatus == 'adicionado'"></alert-component>
+            <alert-component tipo="danger" :detalhes="transicaoDetalhes" titulo="Erro ao tentar cadastrar a marca:" v-if="transicaoStatus == 'erro'"></alert-component>
            
         </template>
 
@@ -58,7 +58,7 @@
                     <input-container-component titulo="Nome da marca" id="novoNome" id-help="novoNomeHelp" >
                         <input type="text" class="form-control" id="novoNome" aria-describedby="novoNomeHelp" placeholder="Informe o nome da marca" v-model="nomeMarca">
                     </input-container-component>
-                    {{ nomeMarca }}
+                   
                 </div>
 
                 <div class="form-group">
@@ -126,6 +126,7 @@ export default {
                         axios.post(this.urlBase, formData, config)
                         .then(response => {
                             this.transicaoStatus = 'adicionado'
+                            this.transicaoDetalhes = response
                             console.log(response)
                         })
                         .catch(errors => {
