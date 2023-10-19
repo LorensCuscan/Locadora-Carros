@@ -48,7 +48,7 @@
 
         <template v-slot:alertas>
             <alert-component tipo="success" v-if="transicaoStatus == 'adicionado'"></alert-component>
-            <alert-component tipo="success" v-if="transicaoStatus == 'erro'"></alert-component>
+            <alert-component tipo="danger" :detalhes="transicaoDetalhes" titulo="Erro ao tentar cadastrar a marca" v-if="transicaoStatus == 'erro'"></alert-component>
            
         </template>
 
@@ -82,21 +82,25 @@
 <script>
 export default {
                 computed: {
-                        token() {
-                            let token = document.cookie.split(';').find(indice =>{
-                                      return indice, indice.includes('token=')
-                            })
-                        token = token.split('=')
-                        token = 'Bearer' + token                       
-                        return token
-                        }
+                         token() {
+
+                let token = document.cookie.split(';').find(indice => {
+                    return indice.includes('token=')
+                })
+
+                token = token.split('=')[1]
+                token = 'Bearer ' + token
+
+                return token
+            }
                     },
                 data() {
                     return {
                         urlBase: 'http://localhost:8000/api/v1/marca',
                     nomeMarca: '',
                     arquivoImagem: [],
-                    transicaoStatus: ''
+                    transicaoStatus: '',
+                    transicaoDetalhes: []
                     };
                 },
                 methods: {
@@ -126,7 +130,8 @@ export default {
                         })
                         .catch(errors => {
                              this.transicaoStatus = 'erro'
-                            console.log(errors)
+                             this.transicaoDetalhes = errors.response
+                            console.log(errors.response.data.message)
                         })
                     }
                 },
