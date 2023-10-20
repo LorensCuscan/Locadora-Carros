@@ -109,13 +109,21 @@ export default {
                 methods: {  
                     carregarLista(e){
                           let config = {
-                            headers: {
-                                'Content-Type' : 'multipart/form-data',
-                                'Accept': 'application/json',
-                                'Authorization': this.token
-                            }
-                        }
-                    },
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': this.token
+                    }
+                }
+
+                axios.get(this.urlBase, config)
+                    .then(response => {
+                        this.marcas = response.data
+                        console.log(this.marcas)
+                    })
+                    .catch(errors => {
+                        console.log(errors)
+                    })
+            },
                    
                     carregarImagem(e) {
                     this.arquivoImagem = e.target.files;
