@@ -76,7 +76,7 @@
             </template>
         </modal-component>
 </div>   
-  <button type="button" @click="carregarLista">Teste</button>   
+    
 </div>
 </template>
 
