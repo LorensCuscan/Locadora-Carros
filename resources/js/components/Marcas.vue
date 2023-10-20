@@ -75,95 +75,95 @@
                 <button type="button" class="btn btn-primary" @click="salvar">Salvar</button>
             </template>
         </modal-component>
-
-        <button type="button" @click="carregarLista">Teste</button>
-</div>      
+</div>   
+  <button type="button" @click="carregarLista">Teste</button>   
 </div>
 </template>
 
 <script>
-export default {
-                computed: {
-                token() {
+                    import axios from 'axios'; // Importar o Axios no script
 
-                let token = document.cookie.split(';').find(indice => {
-                    return indice.includes('token=')
-                })
+                    export default {
+                    computed: {
+                        token() {
+                        let token = document.cookie.split(';').find((indice) => {
+                            return indice.includes('token=');
+                        });
 
-                token = token.split('=')[1]
-                token = 'Bearer ' + token
+                        token = token.split('=')[1];
+                        token = 'Bearer ' + token;
 
-                return token
-            }
+                        return token;
+                        },
                     },
-                data() {
-                    return {
+                    data() {
+                        return {
                         urlBase: 'http://localhost:8000/api/v1/marca',
-                    nomeMarca: '',
-                    arquivoImagem: [],
-                    transicaoStatus: '',
-                    transicaoDetalhes: {},
-                    marcas: []
-                    };
-                },
-                methods: {  
-                    carregarLista(e){
-                          let config = {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Authorization': this.token
-                    }
-                }
-
-                axios.get(this.urlBase, config)
-                    .then(response => {
-                        this.marcas = response.data
-                        console.log(this.marcas)
-                    })
-                    .catch(errors => {
-                        console.log(errors)
-                    })
-            },
-                   
-                    carregarImagem(e) {
-                    this.arquivoImagem = e.target.files;
+                        nomeMarca: '',
+                        arquivoImagem: null, // Alterado para null
+                        transicaoStatus: '',
+                        transicaoDetalhes: {},
+                        marcas: [],
+                        };
                     },
-                    salvar() {
-                        console.log(this.nomeMarca, this.arquivoImagem)
+                    methods: {
+                        carregarLista() {
+                        let config = {
+                            headers: {
+                            'Accept': 'application/json',
+                            Authorization: this.token,
+                            },
+                        };
+
+                        axios
+                            .get(this.urlBase, config) // Adicionado 'config' como segundo argumento
+                            .then((response) => {
+                            this.marcas = response.data;
+                            console.log(this.marcas);
+                            })
+                            .catch((errors) => {
+                            console.log(errors);
+                            });
+                        },
+                        carregarImagem(e) {
+                        this.arquivoImagem = e.target.files[0]; // Alterado para a primeira imagem selecionada
+                        },
+                        salvar() {
+                        console.log(this.nomeMarca, this.arquivoImagem);
 
                         let formData = new FormData();
-                        formData.append('nome', this.nomeMarca)
-                        formData.append('imagem', this.arquivoImagem[0])
+                        formData.append('nome', this.nomeMarca);
+                        formData.append('imagem', this.arquivoImagem);
 
                         let config = {
                             headers: {
-                                'Content-Type' : 'multipart/form-data',
-                                'Accept': 'application/json',
-                                'Authorization': this.token
-                            }
-                        }
+                            'Content-Type': 'multipart/form-data',
+                            Accept: 'application/json',
+                            Authorization: this.token,
+                            },
+                        };
 
-                        axios.post(this.urlBase, formData, config)
-                        .then(response => {
-                            this.transicaoStatus = 'adicionado'
+                        axios
+                            .post(this.urlBase, formData, config)
+                            .then((response) => {
+                            this.transicaoStatus = 'adicionado';
                             this.transicaoDetalhes = {
-                                mensagem: 'Id do registro:' + response.data.id
-                          
-                            }
-                            console.log(response)
-                        })
-                        .catch(errors => {
-                             this.transicaoStatus = 'erro'
-                             this.transicaoDetalhes = {
+                                mensagem: 'Id do registro:' + response.data.id,
+                            };
+                            console.log(response);
+                            })
+                            .catch((errors) => {
+                            this.transicaoStatus = 'erro';
+                            this.transicaoDetalhes = {
                                 mensagem: errors.response.data.message,
-                                dados: errors.response.data.errors
-                             }
-                        })
-                    }
-                },
-                
-                    mounted(){
-                        this.carregarLista()
-                    }
-                };
-                </script>
+                                dados: errors.response.data.errors,
+                            };
+                            });
+                        },
+                    },
+
+                    mounted() {
+                        this.carregarLista();
+                    },
+                    };
+</script>
