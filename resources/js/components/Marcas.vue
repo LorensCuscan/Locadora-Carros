@@ -75,6 +75,8 @@
                 <button type="button" class="btn btn-primary" @click="salvar">Salvar</button>
             </template>
         </modal-component>
+
+        <button type="button" @click="carregarLista">Teste</button>
 </div>      
 </div>
 </template>
@@ -82,7 +84,7 @@
 <script>
 export default {
                 computed: {
-                         token() {
+                token() {
 
                 let token = document.cookie.split(';').find(indice => {
                     return indice.includes('token=')
@@ -100,10 +102,20 @@ export default {
                     nomeMarca: '',
                     arquivoImagem: [],
                     transicaoStatus: '',
-                    transicaoDetalhes: {}
+                    transicaoDetalhes: {},
+                    marcas: []
                     };
                 },
-                methods: {
+                methods: {  
+                    carregarLista(e){
+                          let config = {
+                            headers: {
+                                'Content-Type' : 'multipart/form-data',
+                                'Accept': 'application/json',
+                                'Authorization': this.token
+                            }
+                        }
+                    },
                    
                     carregarImagem(e) {
                     this.arquivoImagem = e.target.files;
@@ -141,5 +153,9 @@ export default {
                         })
                     }
                 },
+                
+                    mounted(){
+                        this.carregarLista()
+                    }
                 };
                 </script>
