@@ -33,7 +33,10 @@
                 <!-- início do card de listagem de marcas -->
                 <card-component titulo="Relação de marcas">
                     <template v-slot:conteudo>
-                        <table-component :dados="marcas"></table-component>
+                        <table-component 
+                        :dados="marcas"
+                        titulos="['ID', 'Nome', 'Imagem]"></table-component
+                        >
                     </template>
 
                     <template v-slot:rodape>
