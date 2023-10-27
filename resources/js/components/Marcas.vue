@@ -35,7 +35,7 @@
                     <template v-slot:conteudo>
                         <table-component 
                         :dados="marcas"
-                        titulos="['ID', 'Nome', 'Imagem]"></table-component
+                        :titulos="['ID', 'Nome', 'Imagem']"></table-component
                         >
                     </template>
 

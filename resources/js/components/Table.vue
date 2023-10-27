@@ -1,10 +1,9 @@
 <template>
 <div>
-    {{ titulos }}
          <table class="table table-hover">
               <thead>
-                <tr :v-for="titulos">
-                    <th scope="col">ID</th>   
+                <tr>
+                    <th scope="col" v-for="t, key in titulos" :key="key">{{t}}</th>   
                 </tr>
             </thead>
             <tbody>
